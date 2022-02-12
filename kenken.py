@@ -6,7 +6,7 @@ info3 = ['*', '+', '-', '+', '*', '+', '-', '/', '+', 'n', '+', '*']
 grid_groups = list(zip(info1, info2, info3))
 
 group = 0
-constaint_num = 1
+constraint_num = 1
 operation = 2
 
 # each square will be labeled with a letter corresponding to the row it's in and a
@@ -43,10 +43,20 @@ def update_grid(squares, answers):
 
 
 for i in range(len(grid_groups) - 1):
-    if len(grid_groups[i][group]) == 1:
-        possible_answers = [grid_groups[i][constaint_num]]
-        update_grid(grid_groups[i][group], possible_answers)
+
+    group = grid_groups[i][0]
+    constraint_num = grid_groups[i][1]
+    operation = grid_groups[i][2]
+    
+    if len(group) == 1:
+        possible_answers = [constraint_num]
+        update_grid(group, possible_answers)
         grid_groups.pop(i)
+    
+    if len(group) == 2:
+        possible_answers = grid_group_math(group, constraint_num, operation)
+
+
 
 print(kenken_grid)
 #print(square_groups)
