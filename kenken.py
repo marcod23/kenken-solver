@@ -1,13 +1,21 @@
+import itertools
+import numpy as np
+
+OPERATIONS = {
+        '+': np.add,
+        '-': np.subtract,
+        '*': np.multiply,
+        '/': np.divide,
+}
+
+
+
 grid_size = 5
 info1 = [['a1', 'b1', 'a2'], ['a3', 'a4'], ['a5', 'b5'], ['b2', 'c2'], ['b3', 'c3'], ['b4', 'c4'], ['c1', 'd1'], ['c5', 'd5'], ['d2', 'd3'], ['d4'], ['e1', 'e2', 'e3'], ['e4', 'e5']]
 info2 = [48, 3, 4, 8, 10, 4, 3, 2, 4, 4, 7, 15]
 info3 = ['*', '+', '-', '+', '*', '+', '-', '/', '+', 'n', '+', '*']
 #info4 = [False] * len(info2)
 grid_groups = list(zip(info1, info2, info3))
-
-group = 0
-constraint_num = 1
-operation = 2
 
 # each square will be labeled with a letter corresponding to the row it's in and a
 # number for the column it's in
@@ -42,21 +50,30 @@ def update_grid(squares, answers):
             update_row_and_col(sq, ans[0])
 
 
+def grid_group_math(group, constraint_num, operation):
+    group_numbers = [1, 2, 3, 4, 5]
+    group_numbers1 = [5, 4, 3, 2, 1]
+    for combination in itertools.combinations_with_replacement(group_numbers1, len(group)):
+        if OPERATIONS[operation].reduce(combination, dtype=float) == constraint_num:
+            print(combination)
+    
+
+
+
 for i in range(len(grid_groups) - 1):
 
     group = grid_groups[i][0]
+    print(group)
     constraint_num = grid_groups[i][1]
     operation = grid_groups[i][2]
     
     if len(group) == 1:
         possible_answers = [constraint_num]
         update_grid(group, possible_answers)
-        grid_groups.pop(i)
-    
-    if len(group) == 2:
-        possible_answers = grid_group_math(group, constraint_num, operation)
+    else:
+        grid_group_math(group, constraint_num, operation)
 
 
 
-print(kenken_grid)
-#print(square_groups)
+#print(kenken_grid)
+print(grid_groups)
